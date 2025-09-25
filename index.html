@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Джонни брат!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-text {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: bold;
+            color: #fff;
+            text-shadow:
+                0 0 20px rgba(255, 255, 255, 0.5),
+                0 0 40px rgba(255, 255, 255, 0.3),
+                0 0 60px rgba(255, 255, 255, 0.1);
+            animation: pulse 3s ease-in-out infinite, float 6s ease-in-out infinite;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .sparkles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: sparkleFloat 8s linear infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-10vh) rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 2rem;
+            animation: fadeInUp 2s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 70%);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-text {
+                font-size: clamp(2rem, 8vw, 4rem);
+            }
+            .subtitle {
+                font-size: 1.2rem;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sparkles" id="sparkles"></div>
+    <div class="glow-effect"></div>
+    <div class="container">
+        <h1 class="main-text">Джонни брат!</h1>
+        <p class="subtitle">✨ Добро пожаловать ✨</p>
+    </div>
+
+    <script>
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 8 + 's';
+            sparkle.style.animationDuration = (Math.random() * 6 + 4) + 's';
+            document.getElementById('sparkles').appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 8000);
+        }
+
+        setInterval(createSparkle, 300);
+
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createSparkle, i * 200);
+        }
+
+        document.addEventListener('click', function(e) {
+            const explosion = document.createElement('div');
+            explosion.style.position = 'fixed';
+            explosion.style.left = e.clientX + 'px';
+            explosion.style.top = e.clientY + 'px';
+            explosion.style.width = '0';
+            explosion.style.height = '0';
+            explosion.style.border = '2px solid rgba(255, 255, 255, 0.8)';
+            explosion.style.borderRadius = '50%';
+            explosion.style.pointerEvents = 'none';
+            explosion.style.animation = 'explode 0.6s ease-out forwards';
+            document.body.appendChild(explosion);
+
+            setTimeout(() => explosion.remove(), 600);
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes explode {
+                to {
+                    width: 100px;
+                    height: 100px;
+                    margin-left: -50px;
+                    margin-top: -50px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
